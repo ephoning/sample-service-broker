@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Oracle Service related service beans -->
+    <bean id="catalogService" class="eddie.temp.oracle.OracleCatalogService">
+        <constructor-arg name="oracleCatalog" ref="oracleCatalog" />
+    </bean>
+    <bean id="instanceService" class="eddie.temp.oracle.OracleServiceInstanceService"/>
+    <bean id="instanceBindingService" class="eddie.temp.oracle.OracleServiceInstanceBindingService"/>
+
+</beans>

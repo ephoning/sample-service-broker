@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- MySQL Catalog instance and supporting data/beans -->
+    <bean id="mysqlCatalog" class="com.pivotal.cf.broker.model.Catalog">
+        <constructor-arg name="serviceDefinitions" ref="mysqlServiceDefinitions" />
+    </bean>
+
+    <util:list id="mysqlServiceDefinitions">
+        <ref bean="mysqlServiceDefinition"/>
+    </util:list>
+
+    <bean id="mysqlServiceDefinition" class="com.pivotal.cf.broker.model.ServiceDefinition">
+        <constructor-arg name="id" value="mysql"/>
+        <constructor-arg name="name" value="mysqlService"/>
+        <constructor-arg name="description" value="mysql Service Instances"/>
+        <constructor-arg name="bindable" value="true"/>
+        <constructor-arg name="plans" ref="mysqlPlans" />
+        <property name="tags" ref="mysqlTags"/>
+    </bean>
+
+    <util:list id="mysqlPlans">
+        <ref bean="mysql-small-plan" />
+        <ref bean="mysql-large-plan" />
+    </util:list>
+
+    <bean id="mysql-small-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="small-mysql-plan"/>
+        <constructor-arg name="name" value="small MySQL Plan"/>
+        <constructor-arg name="description" value="This is a small MySQL plan."/>
+    </bean>
+
+    <bean id="mysql-large-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="large-mysql-plan"/>
+        <constructor-arg name="name" value="large MySQL Plan"/>
+        <constructor-arg name="description" value="This is a large MySQL plan."/>
+    </bean>
+
+    <util:list id="mysqlTags">
+        <value>mysql</value>
+        <value>rdbms</value>
+    </util:list>
+
+</beans>

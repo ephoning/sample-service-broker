@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Foo Catalog instance and supporting data/beans -->
+    <bean id="fooCatalog" class="com.pivotal.cf.broker.model.Catalog">
+        <constructor-arg name="serviceDefinitions" ref="fooServiceDefinitions" />
+    </bean>
+
+    <util:list id="fooServiceDefinitions">
+        <ref bean="fooServiceDefinition"/>
+    </util:list>
+
+    <bean id="fooServiceDefinition" class="com.pivotal.cf.broker.model.ServiceDefinition">
+        <constructor-arg name="id" value="foo"/>
+        <constructor-arg name="name" value="FooService"/>
+        <constructor-arg name="description" value="Foo Service Instances"/>
+        <constructor-arg name="bindable" value="true"/>
+        <constructor-arg name="plans" ref="fooPlans" />
+        <property name="tags" ref="fooTags"/>
+    </bean>
+
+    <util:list id="fooPlans">
+        <ref bean="foo-small-plan" />
+        <ref bean="foo-large-plan" />
+    </util:list>
+
+    <bean id="foo-small-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="small-foo-plan"/>
+        <constructor-arg name="name" value="small"/>
+        <constructor-arg name="description" value="This is a small foo plan."/>
+    </bean>
+
+    <bean id="foo-large-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="large-foo-plan"/>
+        <constructor-arg name="name" value="large"/>
+        <constructor-arg name="description" value="This is a large foo plan."/>
+    </bean>
+
+    <util:list id="fooTags">
+        <value>foo</value>
+        <value>generic</value>
+    </util:list>
+
+</beans>

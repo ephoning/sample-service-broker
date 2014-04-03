@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cloud="http://www.springframework.org/schema/cloud"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/cloud http://www.springframework.org/schema/cloud/spring-cloud.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+
+    <context:component-scan base-package="com.pivotal.cf.broker" />
+
+    <import resource="security-context.xml"/>
+    <import resource="service-repo.xml"/>
+
+    <beans profile="default">
+
+        <import resource="mysql-catalog.xml"/>
+        <import resource="mysql-services.xml"/>
+
+        <context:property-placeholder location="classpath:jdbc.properties" />
+
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            <property name="driverClassName" value="${jdbc.driverClassName}" />
+            <property name="url" value="${jdbc.url}" />
+            <property name="username" value="${jdbc.username}" />
+            <property name="password" value="${jdbc.password}" />
+            <property name="validationQuery" value="${jdbc.validationQuery}"></property>
+        </bean>
+        <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
+        <jdbc:initialize-database data-source="dataSource">
+            <jdbc:script location="classpath:schema.sql"/>
+        </jdbc:initialize-database>
+
+    </beans>
+
+    <beans profile="cloud">
+
+        <import resource="foo-catalog.xml"/>
+        <import resource="foo-services.xml"/>
+
+        <!--
+        <import resource="oracle-catalog.xml"/>
+        <import resource="oracle-services.xml"/>
+        -->
+
+        <cloud:data-source id="dataSource" service-name="sbrepo">
+            <cloud:connection properties="charset=utf-8" />
+            <cloud:pool pool-size="2" max-wait-time="2000" />
+        </cloud:data-source>
+        <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
+        <jdbc:initialize-database data-source="dataSource">
+            <jdbc:script location="classpath:schema.sql"/>
+        </jdbc:initialize-database>
+
+    </beans>
+
+</beans>

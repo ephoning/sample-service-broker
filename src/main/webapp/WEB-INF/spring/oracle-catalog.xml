@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Oracle Catalog instance and supporting data/beans -->
+    <bean id="oracleCatalog" class="com.pivotal.cf.broker.model.Catalog">
+        <constructor-arg name="serviceDefinitions" ref="oracleServiceDefinitions" />
+    </bean>
+
+    <util:list id="oracleServiceDefinitions">
+        <ref bean="oracleServiceDefinition"/>
+    </util:list>
+
+    <bean id="oracleServiceDefinition" class="com.pivotal.cf.broker.model.ServiceDefinition">
+        <constructor-arg name="id" value="Oracle"/>
+        <constructor-arg name="name" value="OracleService"/>
+        <constructor-arg name="description" value="Oracle Service Instances"/>
+        <constructor-arg name="bindable" value="true"/>
+        <constructor-arg name="plans" ref="oraclePlans" />
+        <property name="tags" ref="oracleTags"/>
+    </bean>
+
+    <util:list id="oraclePlans">
+        <ref bean="oracle-small-plan" />
+        <ref bean="oracle-large-plan" />
+    </util:list>
+
+    <bean id="oracle-small-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="small-oracle-plan"/>
+        <constructor-arg name="name" value="Small Oracle Plan"/>
+        <constructor-arg name="description" value="This is a small Oracle plan."/>
+    </bean>
+
+    <bean id="oracle-large-plan" class="com.pivotal.cf.broker.model.Plan">
+        <constructor-arg name="id" value="large-oracle-plan"/>
+        <constructor-arg name="name" value="Large Oracle Plan"/>
+        <constructor-arg name="description" value="This is a large Oracle plan."/>
+    </bean>
+
+    <util:list id="oracleTags">
+        <value>oracle</value>
+        <value>rdbms</value>
+    </util:list>
+
+</beans>
